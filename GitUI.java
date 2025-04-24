@@ -1,8 +1,14 @@
+import javax.management.RuntimeErrorException;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
+import git.tools.client.GitSubprocessClient;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GitUI extends JFrame {
     private JTextField projectPathField;
@@ -13,6 +19,8 @@ public class GitUI extends JFrame {
     private JButton initButton;
     private JButton pushButton;
     private JTextArea statusArea;
+
+    private GitSubprocessClient git;
 
     public GitUI() {
         super("GitHub Repo");
@@ -108,7 +116,27 @@ public class GitUI extends JFrame {
 
     private void onInitialize(ActionEvent e) {
         appendStatus("Starting initialization...");
-        // TODO: Hook up Git operations
+        
+    }
+
+     //Creates the initial commit and Adds the README
+    public static void gitInit() {
+        String projectPath = "./test"; 
+        // method to create an initial commit
+        GitSubprocessClient gitSubprocessClient = new GitSubprocessClient(projectPath); 
+        String gitInit = gitSubprocessClient.gitInit(); 
+
+        //Add README.md
+        String readmePath = projectPath + "/README.md";
+        try {
+            FileWriter fw = new FileWriter(readmePath);
+            fw.write("# Project\n");
+            fw.write("Hello");
+            fw.close();
+        }
+        catch (IOException e) {
+            throw new RuntimeErrorException(null, "Cannot write file");
+        }
     }
 
     private void onPush(ActionEvent e) {
@@ -119,11 +147,5 @@ public class GitUI extends JFrame {
     private void appendStatus(String msg) {
         statusArea.append(msg + "\n");
         statusArea.setCaretPosition(statusArea.getDocument().getLength());
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new GitUI().setVisible(true);
-        });
     }
 }

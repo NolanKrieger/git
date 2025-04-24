@@ -9,26 +9,18 @@ import javax.management.RuntimeErrorException;
 import javax.swing.*;
 
 public class git{
-	
+    private GitSubprocessClient git;
+    private GitHubApiClient github;
+
+
+    // public git(String projectPath, String githubToken){
+    //     this.git = new GitSubprocessClient(projectPath);
+        
+    // }
+   
     public static void main(String[] args){
-       
-        String projectPath = "./test"; // THIS COMES FROM UI TEXT FIELD
-        //method to create an initial commit
-        GitSubprocessClient gitSubprocessClient = new GitSubprocessClient(projectPath); 
-         String gitInit = gitSubprocessClient.gitInit(); 
-
-        //Add README.md
-
-        String readmePath = projectPath + "/README.md";
-        try {
-            FileWriter fw = new FileWriter(readmePath);
-            fw.write("# Project\n");
-            fw.write("Hello");
-            fw.close();
-        }
-        catch (IOException e) {
-            throw new RuntimeErrorException(null, "Cannot write file");
-        }
-
+        SwingUtilities.invokeLater(() -> {
+            new GitUI().setVisible(true);
+        });
     }
 }
