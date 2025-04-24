@@ -9,8 +9,8 @@ import javax.management.RuntimeErrorException;
 import javax.swing.*;
 
 public class git{
-    private GitSubprocessClient git;
-    private GitHubApiClient github;
+    // private GitSubprocessClient git;
+    // private GitHubApiClient github;
 
 
     // public git(String projectPath, String githubToken){

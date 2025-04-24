@@ -1,6 +1,8 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\student\\Downloads\\GitSubprocessClient-v0.0.12.jar"
+        "c:\\Users\\student\\Downloads\\GitSubprocessClient-v0.0.12.jar",
+        "/Users/fahim/Desktop/SCHOOL/CS/IntrotoGit/Module10/GitHubApiClient-v0.0.7.jar",
+        "/Users/fahim/Desktop/SCHOOL/CS/IntrotoGit/Module10/GitSubprocessClient-v0.0.12.jar"
     ]
 }
