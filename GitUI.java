@@ -23,6 +23,7 @@ public class GitUI extends JFrame {
 
     private GitSubprocessClient git;
     //testing
+    //Testing2
     public GitUI() {
         super("GitHub Repo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
