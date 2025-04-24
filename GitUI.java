@@ -22,7 +22,7 @@ public class GitUI extends JFrame {
     private JTextArea statusArea;
 
     private GitSubprocessClient git;
-
+    //testing
     public GitUI() {
         super("GitHub Repo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
