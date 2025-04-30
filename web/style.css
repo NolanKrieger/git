@@ -1,0 +1,49 @@
+header{
+    border: 3px solid black;
+    border-radius: 5px;
+    height: 100px;
+    width: 60%;
+    position: absolute;
+    left: 20%;
+    text-align: center;
+}
+header h1{
+    font-size: 40px;
+}
+#usage{
+    border: 3px solid black;
+    border-radius: 10px;
+    height: 420px;
+    width: 50%;
+    position: absolute;
+    text-align: center;
+    left: 25%;
+    top: 600px;
+}
+#description{
+    border: 3px solid black;
+    border-radius: 10px;
+    height: 300px;
+    width: 50%;
+    position: absolute;
+    text-align: center;
+    left: 25%;
+    top: 200px;
+}
+#reqs{
+    border: 3px solid black;
+    border-radius: 10px;
+    height: 300px;
+    width: 50%;
+    position: absolute;
+    text-align: center;
+    left: 25%;
+    top: 1100px;
+}
+hr{
+    border: 2px solid black;
+}
+p{
+    margin: 10px;
+    font-size: 25px;
+}
