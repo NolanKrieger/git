@@ -282,7 +282,7 @@ public GitUI() {
         System.out.println(".gitignore created at: " + gitignoreFile.getAbsolutePath());
     }
 
-    // Creates the initial commit and Adds the README
+    // Creates the README
     public void createReadMe(String projectPath, String name) {
         this.projectPath = "./test";
 
