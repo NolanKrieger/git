@@ -17,36 +17,39 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class GitUI extends JFrame {
-    private JTextField projectPathField;
-    private JButton browseButton;
-    private JTextField repoNameField;
-    private JTextField usernameField;
-    private JTextArea descriptionArea;
-    private JRadioButton publicButton, privateButton;
-    private JButton initButton;
-    private JButton pushButton;
-    private JTextArea statusArea;
-    private GitSubprocessClient gitClient;
-    private GitHubApiClient githubClient;
-    private String projectPath;
-    private JPasswordField tokenField;
+    // UI components
+    private JTextField projectPathField; // Field to input the project path
+    private JButton browseButton; // Button to browse for a project folder
+    private JTextField repoNameField; // Field to input the repository name
+    private JTextField usernameField; // Field to input the GitHub username
+    private JTextArea descriptionArea; // Text area for the repository description
+    private JRadioButton publicButton, privateButton; // Radio buttons for visibility options
+    private JButton initButton; // Button to initialize the repository
+    private JButton pushButton; // Button to push the repository to GitHub
+    private JTextArea statusArea; // Text area to display status messages
+    private GitSubprocessClient gitClient; // Client for Git subprocess commands
+    private GitHubApiClient githubClient; // Client for GitHub API interactions
+    private String projectPath; // Path to the project folder
+    private JPasswordField tokenField; // Field to input the GitHub personal access token
 
-public GitUI() {
-        super("GitHub Repo");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(700, 800));
+    public GitUI() {
+        super("GitHub Repo"); // Set the title of the JFrame
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Close the application on exit
+        setMinimumSize(new Dimension(700, 800)); //Set the minimum size of the window
 
-        // Load and store original logo image
+        //Load and store the original logo image
         Image originalLogo = new ImageIcon("logo.png").getImage();
         JLabel logoLabel = new JLabel();
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        //Top panel for the logo and project folder selection
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(logoLabel);
         topPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
+        //Panel for selecting the project folder
         JPanel folderPanel = new JPanel(new BorderLayout(10, 10));
         folderPanel.setBorder(new TitledBorder("Project Folder"));
         projectPathField = new JTextField();
@@ -55,11 +58,12 @@ public GitUI() {
         folderPanel.add(browseButton, BorderLayout.EAST);
         topPanel.add(folderPanel);
 
+        //Main panel to hold all components
         JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        // Form Fields
+        //Form panel for repository details
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -68,7 +72,7 @@ public GitUI() {
 
         int row = 0;
 
-        // Repo Name
+        //Add repository name field
         gbc.gridx = 0;
         gbc.gridy = row;
         formPanel.add(new JLabel("Repo Name:"), gbc);
@@ -76,7 +80,7 @@ public GitUI() {
         repoNameField = new JTextField();
         formPanel.add(repoNameField, gbc);
 
-        // Username Field
+        //Add username field
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -85,7 +89,7 @@ public GitUI() {
         usernameField = new JTextField();
         formPanel.add(usernameField, gbc);
 
-        // Add Token
+        //Add token field
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -97,7 +101,7 @@ public GitUI() {
         gbc.gridx = 2;
         formPanel.add(new JLabel("(generate at github.com/setting/tokens)"), gbc);
 
-        // Description
+        //Add description field
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -112,13 +116,7 @@ public GitUI() {
         gbc.weighty = 0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // reset span
-        gbc.gridwidth = 1;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
-
-        // Visibility
+        // Add visibility options
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -136,7 +134,7 @@ public GitUI() {
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Bottom Panel: Action & Status
+        //Bottom panel for action buttons and status area
         JPanel bottomPanel = new JPanel(new BorderLayout(10, 10));
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         initButton = new JButton("Initialize");
@@ -145,7 +143,7 @@ public GitUI() {
         actionPanel.add(pushButton);
         bottomPanel.add(actionPanel, BorderLayout.NORTH);
 
-        // Status area
+        // Status area to display messages
         statusArea = new JTextArea();
         statusArea.setEditable(false);
         statusArea.setRows(5);
@@ -157,7 +155,7 @@ public GitUI() {
         disclaimerLabel.setFont(disclaimerLabel.getFont().deriveFont(Font.ITALIC, 12f));
         disclaimerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Combine bottom
+        // Combine bottom components
         JPanel bottomWrapper = new JPanel(new BorderLayout(10, 10));
         bottomWrapper.add(actionPanel, BorderLayout.NORTH);
         bottomWrapper.add(statusScroll, BorderLayout.CENTER);
@@ -169,23 +167,24 @@ public GitUI() {
         pack();
         setLocationRelativeTo(null);
 
-        // dynamic resizing of logo
+        //Resize logo dynamically when the window is resized
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 int width = getContentPane().getWidth();
-                int height = getContentPane().getHeight() / 6; // reserve 1/6 for logo
+                int height = getContentPane().getHeight() / 6; // Reserve 1/6 for logo
                 Image scaled = originalLogo.getScaledInstance(width / 3, height, Image.SCALE_SMOOTH);
                 logoLabel.setIcon(new ImageIcon(scaled));
             }
         });
 
-        // Listeners
+        //Add action listeners for buttons
         browseButton.addActionListener(this::onBrowse);
         initButton.addActionListener(this::onInitialize);
         pushButton.addActionListener(this::onPush);
     }
 
+    //Browse for a project folder
     private void onBrowse(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -197,6 +196,7 @@ public GitUI() {
         }
     }
 
+    //Initialize the repository
     private void onInitialize(ActionEvent e) {
         String path = projectPathField.getText().trim();
         String name = repoNameField.getText().trim();
@@ -204,69 +204,61 @@ public GitUI() {
         String token = new String(tokenField.getPassword()).trim();
 
         if (path.isEmpty() || name.isEmpty() || token.isEmpty() || user.isEmpty()) {
-            appendStatus("Project path, repo name and token  must be set.");
+            appendStatus("Project path, repo name, and token must be set.");
             return;
         }
         appendStatus("Starting initialization...");
 
         try {
-
+            //Initialize Git repository
             gitClient = new GitSubprocessClient(path);
-
-            // creating the git init
             gitClient.gitInit();
             appendStatus("Initialized");
 
-            // Write the .gitignore
+            //Create .gitignore file
             create(path);
             appendStatus(".gitignore Created");
 
-            // Write README
+            //Create README file
             createReadMe(path, name);
-            appendStatus("Created ReadMe");
+            appendStatus("Created README");
 
-            // Initial commit
+            //Commit changes
             gitClient.gitAddAll();
             gitClient.gitCommit("Initial commit");
             appendStatus("Committed");
 
-            // Setup Github client
+            //Create GitHub repository
             githubClient = new GitHubApiClient(user, token);
-            
-            // Create remote repo
             RequestParams params = new RequestParams();
-            params.addParam("name ", name);
+            params.addParam("name", name);
             params.addParam("description", descriptionArea.getText().trim());
             params.addParam("private", privateButton.isSelected());
-            params.addParam("public", publicButton.isSelected());
-
             CreateRepoResponse response = githubClient.createRepo(params);
             String cloneUrl = response.getJson().get("clone_url").getAsString();
             appendStatus("GitHub repo created");
 
-            // Add remote
+            //Add remote origin
             gitClient.gitRemoteAdd("origin", cloneUrl);
             appendStatus("Remote origin added");
 
         } catch (Exception e1) {
-            appendStatus("Error : " + e1.getMessage());
-
+            appendStatus("Error: " + e1.getMessage());
         }
-
     }
 
-    // Add push handler
+    //Push the repository to GitHub
     private void onPush(ActionEvent e) {
         if (gitClient == null) {
-            appendStatus("Initialize");
+            appendStatus("Initialize the repository first.");
             return;
         }
-        appendStatus("Pushing");
+        appendStatus("Pushing...");
         gitClient.gitPush("master");
-        appendStatus("Push complete");
-
+        appendStatus("Push complete.");
     }
 
+    //Create a .gitignore file
     public static void create(String projectPath) throws IOException {
         File gitignoreFile = new File(projectPath + "/.gitignore");
 
@@ -282,22 +274,20 @@ public GitUI() {
         System.out.println(".gitignore created at: " + gitignoreFile.getAbsolutePath());
     }
 
-    // Creates the README
+    //Create a README file
     public void createReadMe(String projectPath, String name) {
-        this.projectPath = "./test";
-
-        // Add README.md
         String readmePath = projectPath + "/README.md";
         try {
             FileWriter fw = new FileWriter(readmePath);
-            fw.write("# Project\n");
-            fw.write("Hello");
+            fw.write("# " + name + "\n");
+            fw.write("This is the README for the project.\n");
             fw.close();
         } catch (IOException e) {
             throw new RuntimeErrorException(null, "Cannot write file");
         }
     }
 
+    //Append a message to the status area
     private void appendStatus(String msg) {
         statusArea.append(msg + "\n");
         statusArea.setCaretPosition(statusArea.getDocument().getLength());
