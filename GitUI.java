@@ -31,7 +31,7 @@ public class GitUI extends JFrame {
     private String projectPath;
     private JPasswordField tokenField;
 
-    // testing
+private GitSubprocessClient git;
     public GitUI() {
         super("GitHub Repo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
