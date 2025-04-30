@@ -31,8 +31,7 @@ public class GitUI extends JFrame {
     private String projectPath;
     private JPasswordField tokenField;
 
-private GitSubprocessClient git;
-    public GitUI() {
+public GitUI() {
         super("GitHub Repo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(700, 800));
@@ -283,7 +282,7 @@ private GitSubprocessClient git;
         System.out.println(".gitignore created at: " + gitignoreFile.getAbsolutePath());
     }
 
-    // Creates the initial commit and Adds the README
+    // Creates the README
     public void createReadMe(String projectPath, String name) {
         this.projectPath = "./test";
 
